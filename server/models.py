@@ -15,3 +15,11 @@ class Parcel(db.Model):
     destination_id = db.Column(db.Integer, db.ForeignKey('destinations.id'), nullable=False)
     
     destination = db.relationship('Destination', backref='parcel', uselist=False)
+
+class Destination(db.Model):
+    __tablename__ = 'destinations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(100), unique=True)
+    arrival_day = db.Column(db.DateTime, default=db.func.current_timestamp())
+    parcel_id = db.Column(db.Integer, db.ForeignKey(Parcel.id), nullable = False )
