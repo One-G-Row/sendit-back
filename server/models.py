@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from sqlalchemy_serializer import SerializerMixin
+from config import bcrypt
 
 db = SQLAlchemy()
 
@@ -26,7 +27,16 @@ class Destination(db.Model):
     arrival_day = db.Column(db.DateTime, default=db.func.current_timestamp())
     parcel_id = db.Column(db.Integer, db.ForeignKey(Parcel.id), nullable = False )
 
+class User(db.Model, SerializerMixin):
+    __tablename__ = 'users'
 
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255))
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    _password_hash = db.Column(db.String(255), nullable=False)
+
+   
 
 class Admin (db.Model):
     __tablename__ = 'admins'
@@ -47,3 +57,4 @@ class Admin (db.Model):
     
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
