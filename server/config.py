@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Configuration for SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sendit.db' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'group 3'  # Change this to a strong secret key
+app.config['JWT_SECRET_KEY'] = 'group 3' 
 
 # Initialize extensions
 db = SQLAlchemy(app)

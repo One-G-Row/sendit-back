@@ -84,6 +84,48 @@ def delete_parcel(parcel_id):
     db.session.commit()
     return jsonify({'message': 'Parcel deleted successfully'}), 200
 
+@app.route('/admin/register', methods=['POST'])
+def admin_register():
+    data = request.get_json()
+    if Admin.query.filter_by(email=data['email']).first():
+        return jsonify({'message': 'Admin already exists'}), 400
+    new_admin = Admin(
+        first_name = data['first_name'],
+        last_name = data['last_name'],
+        email = data['email'],
+        password = data['password']
+    )
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'Admin created successfully'}), 201
+
+
+@app.route('/admin/login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    admin = Admin.query.filter_by(email=data['email']).first()
+
+    if admin and admin.verify_password(data['password']):
+        access_token = create_access_token(identity=admin.id)
+        return jsonify({'access_token': access_token}), 200
+    return jsonify({'message': 'Invalid credentials'}), 401
+
+
+# Admin change status and location of a parcel delivery order
+@app.route('/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
+@jwt_required()
+def admin_change_status(parcel_id):
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    admin = Admin.query.get(current_user_id)
+    if not admin:
+        return jsonify({'message': 'You are not an admin'}), 403
+    
+    parcel = Parcel.query.get_or_404(parcel_id)
+    parcel.parcel_status = data['parcel_status']
+    db.session.commit()
+    return jsonify({'message': 'Status updated successfully'}), 200
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Ensure all tables are created
