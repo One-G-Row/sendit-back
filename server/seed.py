@@ -40,18 +40,39 @@ if __name__ == '__main__':
         ]
         db.session.add_all(admins)
 
+         # Seed Parcels
+        parcels = []
+        for user in users:
+            parcel = Parcel(
+                parcel_item=fake.word(),
+                parcel_description=fake.text(max_nb_chars=200),
+                parcel_weight=rc([1.0, 2.5, 5.0, 10.0, 20.0]),
+                parcel_cost=rc([50.0, 100.0, 200.0, 300.0]),
+                parcel_status=rc(['Pending', 'Shipped', 'Delivered']),
+                user_id=user.id
+            )
+            parcels.append(parcel)
+        db.session.add_all(parcels)
+        db.session.commit()  # Commit parcels to assign IDs
+
         # Seed Destinations
-        destinations = [
-            Destination(location="Nairobi"),
-            Destination(location="Kisumu"),
-            Destination(location="Mombasa"),
-            Destination(location="Nakuru"),
-            Destination(location="Eldoret"),
-            Destination(location="Kiambu")
-        ]
-        for _ in range(5):
+        for parcel in parcels:
             destination = Destination(
-                arrival_day=fake.date_tim)
+                location=fake.city(),
+                arrival_day=fake.date_time_between(start_date='-30d', end_date='+30d'),
+                parcel_id=parcel.id  # Link destination to parcel
+            )
+            db.session.add(destination)
+
+        # Commit all changes
+        db.session.commit()
+        print("Data seeded successfully!")
+
+
+
+
+
+
 
 
 
