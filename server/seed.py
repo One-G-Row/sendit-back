@@ -41,10 +41,16 @@ if __name__ == '__main__':
         db.session.add_all(admins)
 
         # Seed Destinations
-        destinations = []
+        destinations = [
+            Destination(location="Nairobi"),
+            Destination(location="Kisumu"),
+            Destination(location="Mombasa"),
+            Destination(location="Nakuru"),
+            Destination(location="Eldoret"),
+            Destination(location="Kiambu")
+        ]
         for _ in range(5):
             destination = Destination(
-                location=fake.city(),
                 arrival_day=fake.date_tim)
 
 
