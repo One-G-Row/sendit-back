@@ -1,8 +1,6 @@
 
 from random import randint, choice as rc
-
 from faker import Faker
-
 from app import app
 from models import db, Parcel, Destination, User, Admin
 
@@ -24,21 +22,33 @@ if __name__ == '__main__':
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.email(),
-                _password_hash='password123'  # Default password
+                password='password123'  # Default password
             )
             users.append(user)
         db.session.add_all(users)
+        db.session.commit()
 
                 # Seed Admins
         admins = [
-            Admin(first_name="Charles", last_name="Kagoko", email="chalokagoko@gmailcom", password_hash="charles123"),
-            Admin(first_name="Faith", last_name="Kimaru", email="faith@gmailcom", password_hash="faith123"),
-            Admin(first_name="Paul", last_name="Saitabau", email="paul@gmailcom", password_hash="paul123"),
-            Admin(first_name="Alvin", last_name="Kyle", email="alvin@gmailcom", password_hash="alvin123"),
-            Admin(first_name="Teddy", last_name="Kiplagat", email="teddy@gmailcom", password_hash="teddy123"),
-            Admin(first_name=fake.first_name(), last_name=fake.last_name(), email=fake.email(), password_hash="password123")
+            Admin(first_name="Charles", last_name="Kagoko", email="chalokagoko@gmailcom", password="charles123"),
+            Admin(first_name="Faith", last_name="Kimaru", email="faith@gmailcom", password="faith123"),
+            Admin(first_name="Paul", last_name="Saitabau", email="paul@gmailcom", password="paul123"),
+            Admin(first_name="Alvin", last_name="Kyle", email="alvin@gmailcom", password="alvin123"),
+            Admin(first_name="Teddy", last_name="Kiplagat", email="teddy@gmailcom", password="teddy123"),
+            Admin(first_name=fake.first_name(), last_name=fake.last_name(), email=fake.email(), password="password123")
         ]
         db.session.add_all(admins)
+        db.session.commit()
+
+        destinations = []
+        for _ in range(10):
+            destination = Destination(
+                location=fake.city(),
+                arrival_day=fake.date_time_between(start_date='-30d', end_date='+30d')
+            )
+            destinations.append(destination)
+        db.session.add_all(destinations)
+        db.session.commit()
 
          # Seed Parcels
         parcels = []
@@ -65,7 +75,7 @@ if __name__ == '__main__':
             db.session.add(destination)
 
         # Commit all changes
-        db.session.commit()
+            db.session.commit()
         print("Data seeded successfully!")
 
 
