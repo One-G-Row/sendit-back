@@ -1,12 +1,22 @@
 from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, bcrypt, User, Admin, Parcel, Destination
-from config import app, jwt
 
-# Initialize the app with configurations from config.py
-app.config.from_object('config')
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Update as needed
+app.config['SECRET_KEY'] = 'your_secret_key'  # Update as needed
 
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
+from server.models import User, Admin, Parcel, Destination
+
+# Define a simple home route
+@app.route('/')
+def home():
+    return jsonify({'message': 'Welcome to the SendIT API!'}), 200
 
 # Define routes for parcel management
 @app.route('/parcels', methods=['POST'])
@@ -90,15 +100,14 @@ def admin_register():
     if Admin.query.filter_by(email=data['email']).first():
         return jsonify({'message': 'Admin already exists'}), 400
     new_admin = Admin(
-        first_name = data['first_name'],
-        last_name = data['last_name'],
-        email = data['email'],
-        password = data['password']
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        email=data['email'],
+        password=data['password']
     )
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'Admin created successfully'}), 201
-
 
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
@@ -110,8 +119,6 @@ def admin_login():
         return jsonify({'access_token': access_token}), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 
-
-# Admin change status and location of a parcel delivery order
 @app.route('/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
 @jwt_required()
 def admin_change_status(parcel_id):
