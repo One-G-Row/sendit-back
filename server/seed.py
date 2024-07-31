@@ -1,5 +1,5 @@
-from server import app, db
-from server.models import Parcel, Destination, User, Admin
+from app import app, db
+from models import Parcel, Destination, User, Admin
 from faker import Faker
 from random import choice as rc
 
@@ -47,12 +47,26 @@ if __name__ == '__main__':
             destinations.append(destination)
         db.session.add_all(destinations)
 
+        # Define specific items and descriptions
+        item_descriptions = {
+            "Electronics": "A delicate electronic device, handle with care.",
+            "Furniture": "Large item, ensure it is securely packed.",
+            "Clothing": "Seasonal clothing items, various sizes.",
+            "Books": "A collection of books, some may be fragile.",
+            "Groceries": "Food items, packed with care to prevent spoilage.",
+            "Toys": "Children's toys, ensure they are packed safely.",
+            "Jewelry": "Valuable jewelry items, handle with utmost care.",
+            "Sports Equipment": "Outdoor gear, packed to prevent damage."
+        }
+
         # Seed Parcels
         for user in User.query.all():
             for _ in range(5):
+                parcel_item = rc(list(item_descriptions.keys()))
+                parcel_description = item_descriptions[parcel_item]
                 parcel = Parcel(
-                    parcel_item=fake.word(),
-                    parcel_description=fake.sentence(),
+                    parcel_item=parcel_item,
+                    parcel_description=parcel_description,
                     parcel_weight=round(fake.random_number(digits=2), 2),
                     parcel_cost=round(fake.random_number(digits=2), 2),
                     parcel_status=rc(['Pending', 'In Transit', 'Delivered']),
@@ -63,8 +77,3 @@ if __name__ == '__main__':
 
         db.session.commit()
         print("Seeding complete.")
-
-
-
-
-
