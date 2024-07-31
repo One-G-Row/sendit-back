@@ -1,6 +1,4 @@
-from flask import Flask
-from flask_bcrypt import Bcrypt
-
-app = Flask(__name__)
-
-bcrypt = Bcrypt(app)
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///sendit.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = 'group 3'
