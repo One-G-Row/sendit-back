@@ -1,8 +1,11 @@
 
 from flask import Flask, jsonify, request, session, make_response
 from flask_restful import Resource
-from models import User
+from models import Destination, User, Parcel, Admin
 from flask_bcrypt import generate_password_hash
+from config import db, api, app
+from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
+
 
 class Users(Resource):
     def get(self, user_id):
@@ -47,21 +50,8 @@ class UserList(Resource):
     
 api.add_resource(UserList, '/users')
 api.add_resource(Users, '/users/<int:user_id>')
-=======
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Update as needed
-app.config['SECRET_KEY'] = 'your_secret_key'  # Update as needed
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-jwt = JWTManager(app)
-
-from server.models import User, Admin, Parcel, Destination
 
 # Define a simple home route
 @app.route('/')
@@ -182,6 +172,11 @@ def admin_change_status(parcel_id):
     parcel.parcel_status = data['parcel_status']
     db.session.commit()
     return jsonify({'message': 'Status updated successfully'}), 200
+
+@app.route('/destinations/', methods=['GET'])
+def get_destinations():
+    destinations = [destination.to_dict() for destination in Destination.query.all()]
+    return make_response(jsonify(destinations), 200)
 
 if __name__ == '__main__':
     with app.app_context():
