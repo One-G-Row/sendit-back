@@ -1,7 +1,7 @@
-from random import choice as rc
-from faker import Faker
 from server import app, db
 from server.models import Parcel, Destination, User, Admin
+from faker import Faker
+from random import choice as rc
 
 if __name__ == '__main__':
     fake = Faker()
@@ -63,4 +63,8 @@ if __name__ == '__main__':
 
         db.session.commit()
         print("Seeding complete.")
+
+
+
+
 
