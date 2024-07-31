@@ -51,6 +51,13 @@ class UserList(Resource):
 api.add_resource(UserList, '/users')
 api.add_resource(Users, '/users/<int:user_id>')
 
+class Admins(Resource):
+    def get(self):
+        admins = [admin.to_dict() for admin in Admin.query.all()]
+        return make_response(jsonify(admins), 200)
+
+api.add_resource(Admins, '/admins')
+
 
 
 # Define a simple home route
