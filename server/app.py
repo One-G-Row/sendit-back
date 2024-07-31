@@ -52,11 +52,17 @@ api.add_resource(UserList, '/users')
 api.add_resource(Users, '/users/<int:user_id>')
 
 class Admins(Resource):
-    def get(self):
-        admins = [admin.to_dict() for admin in Admin.query.all()]
-        return make_response(jsonify(admins), 200)
+    def get(self, admin_id=None):
+        if admin_id:
+            admin = Admin.query.get(admin_id)
+            if not admin:
+                return make_response(jsonify({'error': 'Admin not found'}), 404)
+            return make_response(jsonify(admin.to_dict()), 200)
+        else:
+            admins = [admin.to_dict() for admin in Admin.query.all()]
+            return make_response(jsonify(admins), 200)
 
-api.add_resource(Admins, '/admins')
+api.add_resource(Admins, '/admins', '/admins/<int:admin_id>')
 
 
 
@@ -187,5 +193,5 @@ def get_destinations():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Ensure all tables are created
+        db.create_all()  
     app.run(debug=True)
