@@ -55,7 +55,8 @@ class Parcel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     destination_id = db.Column(db.Integer, db.ForeignKey('destinations.id'), nullable=False)
     
-    destination = db.relationship('Destination', backref='parcels', uselist=False)
+    user = db.relationship('User', backref='parcels')
+    destination = db.relationship('Destination', backref='parcels')
 
 
 class Destination(db.Model):
@@ -64,4 +65,3 @@ class Destination(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(100), unique=True)
     arrival_day = db.Column(db.DateTime, default=db.func.current_timestamp())
-    parcels = db.relationship('Parcel', backref='destination', lazy=True)
