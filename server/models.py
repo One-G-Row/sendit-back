@@ -18,7 +18,7 @@ class Parcel(db.Model):
     destination = db.relationship('Destination', back_populates='parcel')
     user = db.relationship('User', back_populates='parcels')
 
-class Destination(db.Model):
+class Destination(db.Model, SerializerMixin):
     __tablename__ = 'destinations'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +26,13 @@ class Destination(db.Model):
     arrival_day = db.Column(db.DateTime, default=db.func.current_timestamp())
     
     parcel = db.relationship('Parcel', back_populates='destination', uselist=False)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'location': self.location,
+            'arrival_day': self.arrival_day.isoformat() if self.arrival_day else None
+        }
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
