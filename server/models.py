@@ -1,7 +1,8 @@
-
+from flask import Flask, session
 from config import db, bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
+
 
 class Parcel(db.Model):
     __tablename__ = 'parcels'
@@ -43,7 +44,7 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     _password_hash = db.Column(db.String(255), nullable=False)
     parcels = db.relationship('Parcel', back_populates='user')
-
+    
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

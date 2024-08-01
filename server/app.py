@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request, make_response, session
 from flask_restful import Resource
 from models import Destination, User, Parcel, Admin
-from flask_bcrypt import generate_password_hash, check_password_hash
 from config import db, api, app
+from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
 
 class ClearSession(Resource):
