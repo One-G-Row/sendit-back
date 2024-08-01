@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, session
 from flask_restful import Resource
 from models import Destination, User, Parcel, Admin
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -126,7 +126,9 @@ api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(ClearSession, '/clear', endpoint='clear')
-api.add_resource(Signup, '/signup', endpoint='signup'
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(UserList, '/users', endpoint='users')
+api.add_resource(Users, '/users/<int:user_id>', endpoint='user')
 
 # Define Admin-related endpoints
 class Admins(Resource):
