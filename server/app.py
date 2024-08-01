@@ -64,7 +64,56 @@ class Admins(Resource):
 
 api.add_resource(Admins, '/admins', '/admins/<int:admin_id>')
 
+class Destinations(Resource):
+    def get(self, destination_id=None):
+        if destination_id:
+            destination = Destination.query.get(destination_id)
+            if not destination:
+                return make_response(jsonify({'error': 'Destination not found'}), 404)
+            return make_response(jsonify(destination.to_dict()), 200)
+        else:
+            destinations = [destination.to_dict() for destination in Destination.query.all()]
+            return make_response(jsonify(destinations), 200)
+    
+    def post(self):
+        data = request.get_json()
+        if not data or not data.get('location'):
+            return jsonify({'message': 'Missing location information'}), 400
+        
+        new_destination = Destination(
+            location=data.get('location'),
+            arrival_day=data.get('arrival_day')
+        )
+        db.session.add(new_destination)
+        db.session.commit()
+        return jsonify({'message': 'Destination created successfully'}), 201
+    
+    def put(self, destination_id):
+        data = request.get_json()
+        destination = Destination.query.get_or_404(destination_id)
+        
+        if 'location' in data:
+            destination.location = data['location']
+        if 'arrival_day' in data:
+            destination.arrival_day = data['arrival_day']
+        
+        db.session.commit()
+        return jsonify({'message': 'Destination updated successfully'}), 200
+    
+    def delete(self, destination_id):
+        destination = Destination.query.get_or_404(destination_id)
+        db.session.delete(destination)
+        db.session.commit()
+        return jsonify({'message': 'Destination deleted successfully'}), 200
 
+api.add_resource(Destinations, '/destinations/<int:destination_id>')
+
+class DestinationList(Resource):
+    def get(self):
+        destinations = [destination.to_dict() for destination in Destination.query.all()]
+        return make_response(jsonify(destinations), 200)
+
+api.add_resource(DestinationList, '/destinations')
 
 # Define a simple home route
 @app.route('/')
@@ -185,11 +234,6 @@ def admin_change_status(parcel_id):
     parcel.parcel_status = data['parcel_status']
     db.session.commit()
     return jsonify({'message': 'Status updated successfully'}), 200
-
-@app.route('/destinations/', methods=['GET'])
-def get_destinations():
-    destinations = [destination.to_dict() for destination in Destination.query.all()]
-    return make_response(jsonify(destinations), 200)
 
 if __name__ == '__main__':
     with app.app_context():
