@@ -26,6 +26,13 @@ class Destination(db.Model, SerializerMixin):
     arrival_day = db.Column(db.DateTime, default=db.func.current_timestamp())
     
     parcel = db.relationship('Parcel', back_populates='destination', uselist=False)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'location': self.location,
+            'arrival_day': self.arrival_day.isoformat() if self.arrival_day else None
+        }
 
     def to_dict(self):
         return {
