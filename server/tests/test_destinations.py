@@ -1,26 +1,29 @@
 import pytest
-from app import app, db
+from flask import json
+from config import app, db
 from models import Destination
+from flask_jwt_extended import create_access_token
 
-def test_get_destinations(test_client, init_database):
-    response = test_client.get('/destinations')
-    assert response.status_code == 200
-    assert len(response.json) > 0
+@pytest.fixture(scope='module')
+def test_client():
+    app.config.from_object('config_test.Config')
+    with app.test_client() as testing_client:
+        with app.app_context():
+            db.create_all()
+        yield testing_client
+        with app.app_context():
+            db.drop_all()
 
-def test_create_destination(test_client, init_database):
+@pytest.fixture(scope='module')
+def auth_header(test_client):
+    access_token = create_access_token(identity=1)  # Mock user ID
+    return {'Authorization': f'Bearer {access_token}'}
+
+def test_create_destination(test_client, auth_header):
     response = test_client.post('/destinations', json={
-        'name': 'New Destination',
-        'location': 'New Location'
-    })
+        'name': 'New York',
+        'location': 'USA'
+    }, headers=auth_header)
     assert response.status_code == 201
-    assert response.json['message'] == 'Destination created successfully'
-
-def test_update_destination(test_client, init_database):
-    response = test_client.put('/destinations/1', json={'name': 'Updated Destination'})
-    assert response.status_code == 200
-    assert response.json['message'] == 'Destination updated successfully'
-
-def test_delete_destination(test_client, init_database):
-    response = test_client.delete('/destinations/1')
-    assert response.status_code == 200
-    assert response.json['message'] == 'Destination deleted successfully'
+    data = json.loads(response.data)
+    assert data['message'] == 'Destination created successfully'

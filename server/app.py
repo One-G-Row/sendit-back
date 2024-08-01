@@ -1,10 +1,73 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, session
 from flask_restful import Resource
 from models import Destination, User, Parcel, Admin
+from config import db, api, app
 from flask_bcrypt import generate_password_hash, check_password_hash
-from config import db, api, app, bcrypt
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
 
+class ClearSession(Resource):
+    def delete(self):
+        session['page_views'] = None
+        session['user_id'] = None
+
+class Signup(Resource):
+    def get(self):
+        return {}, 200
+    
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+            hashed_password = generate_password_hash(data['password'])
+            user = User(
+                first_name = data['first_name'],
+                last_name = data['last_name'],
+                email = data['email'],
+                password_hash = hashed_password
+            )
+            db.session.add(user)
+            db.session.commit()
+            return make_response(jsonify(user.to_dict()), 201)
+        except Exception as e:
+            print("Error:", e)
+            db.session.rollback()
+            return {'error': str(e)}, 400
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter_by(id=session.get('user_id')).first()
+        if user:
+            response = jsonify(user.to_dict), 200
+            return response
+        else:
+            return {}, 204
+        
+class LoginUser(Resource):
+    def post(self):
+        user = User.query.filter(User.email == request.get_json()['email']).first()
+        if user:
+            session['user_id'] = user.id
+            response = make_response(jsonify(user.to_dict()), 200)
+            return response 
+        else:
+            return {}, 401
+           
+class LoginAdmin(Resource):
+    def post(self):
+        admin = Admin.query.filter(Admin.email == request.get_json())['email'].first()
+        if admin:
+            session['admin_id'] = admin.id
+            response = make_response(jsonify(admin.to_dict()), 200)
+            return response
+        else:
+            return {}, 401
+        
+class Logout(Resource):
+    def delete(self):
+        session['user_id'] = None
+        return {}, 204
+        
 # Define User-related endpoints
 class Users(Resource):
     def get(self, user_id):
@@ -43,24 +106,29 @@ class UserList(Resource):
     
     def post(self):
         data = request.get_json()
-        if not data or not data.get('email') or not data.get('password'):
-            return {'error': 'Email and password are required'}, 400
-        
-        if User.query.filter_by(email=data['email']).first():
-            return {'error': 'User already exists'}, 400
-        
-        #hashed_password = generate_password_hash(data['password'])
-        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-        user = User(
-            email=data['email'],
-            password_hash=hashed_password
-        )
-        db.session.add(user)
-        db.session.commit()
-        return make_response(jsonify(user.to_dict()), 201)
-
-api.add_resource(UserList, '/users')
-api.add_resource(Users, '/users/<int:user_id>')
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+           hashed_password = generate_password_hash(data['password'])
+           user = User(
+              email = data['email'],
+              password_hash = hashed_password
+           )
+           db.session.add(user)
+           db.session.commit() 
+        except Exception as e:
+           print("Error:", e) 
+           db.session.rollback()
+           return {'error': str(e)}, 400
+    
+api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
+api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
+api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(ClearSession, '/clear', endpoint='clear')
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(UserList, '/users', endpoint='users')
+api.add_resource(Users, '/users/<int:user_id>', endpoint='user')
 
 # Define Admin-related endpoints
 class Admins(Resource):
@@ -164,9 +232,7 @@ def admin_register():
     if Admin.query.filter_by(email=data['email']).first():
         return jsonify({'message': 'Admin already exists'}), 400
 
-    #hashed_password = generate_password_hash(data['password'])
-    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-    
+    hashed_password = generate_password_hash(data['password'])
     new_admin = Admin(
         first_name=data['first_name'],
         last_name=data['last_name'],

@@ -1,8 +1,8 @@
-"""Initial migration
+"""empty message
 
-Revision ID: 6bfbebd66310
+Revision ID: 3a1d9175ef1a
 Revises: 
-Create Date: 2024-07-31 10:50:40.701049
+Create Date: 2024-08-01 12:38:37.450722
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6bfbebd66310'
+revision = '3a1d9175ef1a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,7 +29,7 @@ def upgrade():
     )
     op.create_table('destinations',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('location', sa.String(length=100), nullable=True),
+    sa.Column('location', sa.String(length=100), nullable=False),
     sa.Column('arrival_day', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('location')
@@ -37,7 +37,7 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(length=255), nullable=False),
-    sa.Column('last_name', sa.String(length=255), nullable=True),
+    sa.Column('last_name', sa.String(length=255), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('_password_hash', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id'),

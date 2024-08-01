@@ -1,8 +1,7 @@
-
-from config import db, Bcrypt
+from flask import Flask, session
+from config import db, bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
-from config import app, db, bcrypt
 
 
 class Parcel(db.Model):
@@ -36,13 +35,6 @@ class Destination(db.Model, SerializerMixin):
             'arrival_day': self.arrival_day.isoformat() if self.arrival_day else None
         }
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'location': self.location,
-            'arrival_day': self.arrival_day
-        }
-
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -52,7 +44,7 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     _password_hash = db.Column(db.String(255), nullable=False)
     parcels = db.relationship('Parcel', back_populates='user')
-
+    
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

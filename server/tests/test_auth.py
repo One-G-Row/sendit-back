@@ -1,6 +1,6 @@
 import pytest
 from flask import json
-from config import app, db 
+from config import app, db
 from models import Parcel, Destination, User, Admin
 
 @pytest.fixture(scope='module')
