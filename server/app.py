@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, request, session, make_response
 from flask_restful import Api, Resource
 from flask_bcrypt import generate_password_hash
@@ -53,6 +54,134 @@ class UserList(Resource):
 # Initialize the app with configurations from config.py
 app.config.from_object('config')
 
+
+from flask import Flask, jsonify, request, session, make_response
+from flask_restful import Resource
+from models import Destination, User, Parcel, Admin
+from flask_bcrypt import generate_password_hash
+from config import db, api, app
+from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
+
+
+class ClearSession(Resource):
+    def delete(self):
+        session['page_views'] = None
+        session['user_id'] = None
+
+class Signup(Resource):
+    def get(self):
+        return {}, 200
+    
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+            hashed_password = generate_password_hash(data['password'])
+            user = User(
+                first_name = data['first_name'],
+                last_name = data['last_name'],
+                email = data['email'],
+                password_hash = hashed_password
+            )
+            db.session.add(user)
+            db.session.commit()
+            return make_response(jsonify(user.to_dict()), 201)
+        except Exception as e:
+            print("Error:", e)
+            db.session.rollback()
+            return {'error': str(e)}, 400
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter_by(id=session.get('user_id')).first()
+        if user:
+            response = jsonify(user.to_dict), 200
+            return response
+        else:
+            return {}, 204
+        
+class LoginUser(Resource):
+    def post(self):
+        user = User.query.filter(User.email == request.get_json()['email']).first()
+        if user:
+            session['user_id'] = user.id
+            response = make_response(jsonify(user.to_dict()), 200)
+            return response 
+        else:
+            return {}, 401
+           
+class LoginAdmin(Resource):
+    def post(self):
+        admin = Admin.query.filter(Admin.email == request.get_json())['email'].first()
+        if admin:
+            session['admin_id'] = admin.id
+            response = make_response(jsonify(admin.to_dict()), 200)
+            return response
+        else:
+            return {}, 401
+        
+class Logout(Resource):
+    def delete(self):
+        session['user_id'] = None
+        return {}, 204
+        
+class Users(Resource):
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        return make_response(jsonify(user.to_dict()), 200)
+    
+    def patch(self, user_id):
+        data = request.get_json()
+        user = User.query.get(user_id)
+        user.email = data['email']
+        user.password = data['password']
+        db.session.commit()
+        return make_response(jsonify(user.to_dict()), 200)
+    
+    def delete(self, user_id):
+        user = User.query.get(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return '', 204
+
+class UserList(Resource):
+    def get(self):
+        users = [user.to_dict() for user in User.query.all()]
+        return make_response(jsonify(users), 200)
+    
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+           hashed_password = generate_password_hash(data['password'])
+           user = User(
+              email = data['email'],
+              password_hash = hashed_password
+           )
+           db.session.add(user)
+           db.session.commit() 
+        except Exception as e:
+           print("Error:", e) 
+           db.session.rollback()
+           return {'error': str(e)}, 400
+    
+api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
+api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')
+api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(ClearSession, '/clear', endpoint='clear')
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(UserList, '/users')
+api.add_resource(Users, '/users/<int:user_id>')
+
+
+
+# Define a simple home route
+@app.route('/')
+def home():
+    return jsonify({'message': 'Welcome to the SendIT API!'}), 200
 
 # Define routes for parcel management
 @app.route('/parcels', methods=['POST'])
@@ -130,10 +259,55 @@ def delete_parcel(parcel_id):
     db.session.commit()
     return jsonify({'message': 'Parcel deleted successfully'}), 200
 
+@app.route('/admin/register', methods=['POST'])
+def admin_register():
+    data = request.get_json()
+    if Admin.query.filter_by(email=data['email']).first():
+        return jsonify({'message': 'Admin already exists'}), 400
+    new_admin = Admin(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        email=data['email'],
+        password=data['password']
+    )
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'Admin created successfully'}), 201
+
+@app.route('/admin/login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    admin = Admin.query.filter_by(email=data['email']).first()
+
+    if admin and admin.verify_password(data['password']):
+        access_token = create_access_token(identity=admin.id)
+        return jsonify({'access_token': access_token}), 200
+    return jsonify({'message': 'Invalid credentials'}), 401
+
+@app.route('/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
+@jwt_required()
+def admin_change_status(parcel_id):
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    admin = Admin.query.get(current_user_id)
+    if not admin:
+        return jsonify({'message': 'You are not an admin'}), 403
+    
+    parcel = Parcel.query.get_or_404(parcel_id)
+    parcel.parcel_status = data['parcel_status']
+    db.session.commit()
+    return jsonify({'message': 'Status updated successfully'}), 200
+
+@app.route('/destinations/', methods=['GET'])
+def get_destinations():
+    destinations = [destination.to_dict() for destination in Destination.query.all()]
+    return make_response(jsonify(destinations), 200)
+
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Ensure all tables are created
     app.run(debug=True)
 
-api.add_resource(UserList, '/users')
-api.add_resource(Users, '/users/<int:user_id>')
