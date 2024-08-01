@@ -743,7 +743,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ en_AU
 │  │        │  │  │  │  ├─ __init__.py
@@ -780,7 +783,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -1010,7 +1016,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -1176,7 +1185,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_GB
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ en_IE
 │  │        │  │  │  │  ├─ __init__.py
@@ -1294,7 +1306,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_ES
 │  │        │  │  │  │  ├─ __init__.py
@@ -1347,7 +1362,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -1449,7 +1467,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_CL
 │  │        │  │  │  │  ├─ __init__.py
@@ -1583,7 +1604,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fa_IR
 │  │        │  │  │  │  ├─ __init__.py
@@ -1645,7 +1669,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -1763,7 +1790,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -1931,7 +1961,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ pl_PL
 │  │        │  │  │  │  ├─ __init__.py
@@ -2009,7 +2042,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -2182,7 +2218,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -2332,7 +2371,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fa_IR
 │  │        │  │  │  │  ├─ __init__.py
@@ -2410,7 +2452,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fil_PH
 │  │        │  │  │  │  ├─ __init__.py
@@ -2428,7 +2473,10 @@ sendIT-group-5-project
 │  │        │  │  │  └─ en_US
 │  │        │  │  │     ├─ __init__.py
 │  │        │  │  │     └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │        ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │        └─ __init__.cpython-310.pyc
 │  │        │  │  ├─ person
 │  │        │  │  │  ├─ __init__.py
@@ -2510,7 +2558,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -2788,7 +2839,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -3055,7 +3109,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_CA
 │  │        │  │  │  │  ├─ __init__.py
@@ -7587,7 +7644,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ en_AU
 │  │        │  │  │  │  ├─ __init__.py
@@ -7624,7 +7684,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -7854,7 +7917,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -8020,7 +8086,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_GB
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ en_IE
 │  │        │  │  │  │  ├─ __init__.py
@@ -8138,7 +8207,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_ES
 │  │        │  │  │  │  ├─ __init__.py
@@ -8191,7 +8263,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -8293,7 +8368,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_CL
 │  │        │  │  │  │  ├─ __init__.py
@@ -8427,7 +8505,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fa_IR
 │  │        │  │  │  │  ├─ __init__.py
@@ -8489,7 +8570,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -8607,7 +8691,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -8775,7 +8862,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ pl_PL
 │  │        │  │  │  │  ├─ __init__.py
@@ -8853,7 +8943,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -9026,7 +9119,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -9176,7 +9272,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fa_IR
 │  │        │  │  │  │  ├─ __init__.py
@@ -9254,7 +9353,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ fil_PH
 │  │        │  │  │  │  ├─ __init__.py
@@ -9272,7 +9374,10 @@ sendIT-group-5-project
 │  │        │  │  │  └─ en_US
 │  │        │  │  │     ├─ __init__.py
 │  │        │  │  │     └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │        ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │        └─ __init__.cpython-310.pyc
 │  │        │  │  ├─ person
 │  │        │  │  │  ├─ __init__.py
@@ -9354,7 +9459,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es
 │  │        │  │  │  │  ├─ __init__.py
@@ -9632,7 +9740,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_AR
 │  │        │  │  │  │  ├─ __init__.py
@@ -9899,7 +10010,10 @@ sendIT-group-5-project
 │  │        │  │  │  ├─ en_US
 │  │        │  │  │  │  ├─ __init__.py
 │  │        │  │  │  │  └─ __pycache__
+<<<<<<< HEAD
 │  │        │  │  │  │     ├─ __init__.cpython-310-pytest-8.3.2.pyc
+=======
+>>>>>>> 256e6da (readme file structure)
 │  │        │  │  │  │     └─ __init__.cpython-310.pyc
 │  │        │  │  │  ├─ es_CA
 │  │        │  │  │  │  ├─ __init__.py
