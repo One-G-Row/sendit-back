@@ -1,7 +1,8 @@
-from app import app, db
-from models import Parcel, Destination, User, Admin
+
+from random import randint, choice as rc
 from faker import Faker
-from random import choice as rc
+from app import app
+from models import db, Parcel, Destination, User, Admin
 
 if __name__ == '__main__':
     fake = Faker()
@@ -25,55 +26,64 @@ if __name__ == '__main__':
             )
             users.append(user)
         db.session.add_all(users)
+        db.session.commit()
 
-        # Seed Admins
+                # Seed Admins
         admins = [
-            Admin(first_name="Charles", last_name="Kagoko", email="chalokagoko@gmail.com", password="charles123"),
-            Admin(first_name="Faith", last_name="Kimaru", email="faith@gmail.com", password="faith123"),
-            Admin(first_name="Paul", last_name="Saitabau", email="paul@gmail.com", password="paul123"),
-            Admin(first_name="Alvin", last_name="Kyle", email="alvin@gmail.com", password="alvin123"),
-            Admin(first_name="Teddy", last_name="Kiplagat", email="teddy@gmail.com", password="teddy123"),
-            Admin(first_name="Ted", last_name="Muigai", email="ted@gmail.com", password="muigai123"),  # New Admin
+            Admin(first_name="Charles", last_name="Kagoko", email="chalokagoko@gmailcom", password="charles123"),
+            Admin(first_name="Faith", last_name="Kimaru", email="faith@gmailcom", password="faith123"),
+            Admin(first_name="Paul", last_name="Saitabau", email="paul@gmailcom", password="paul123"),
+            Admin(first_name="Alvin", last_name="Kyle", email="alvin@gmailcom", password="alvin123"),
+            Admin(first_name="Teddy", last_name="Kiplagat", email="teddy@gmailcom", password="teddy123"),
             Admin(first_name=fake.first_name(), last_name=fake.last_name(), email=fake.email(), password="password123")
         ]
         db.session.add_all(admins)
+        db.session.commit()
 
-        # Seed Destinations
         destinations = []
-        for _ in range(5):
+        for _ in range(10):
             destination = Destination(
-                location=fake.city()
+                location=fake.city(),
+                arrival_day=fake.date_time_between(start_date='-30d', end_date='+30d')
             )
             destinations.append(destination)
         db.session.add_all(destinations)
-
-        # Define specific items and descriptions
-        item_descriptions = {
-            "Electronics": "A delicate electronic device, handle with care.",
-            "Furniture": "Large item, ensure it is securely packed.",
-            "Clothing": "Seasonal clothing items, various sizes.",
-            "Books": "A collection of books, some may be fragile.",
-            "Groceries": "Food items, packed with care to prevent spoilage.",
-            "Toys": "Children's toys, ensure they are packed safely.",
-            "Jewelry": "Valuable jewelry items, handle with utmost care.",
-            "Sports Equipment": "Outdoor gear, packed to prevent damage."
-        }
-
-        # Seed Parcels
-        for user in User.query.all():
-            for _ in range(5):
-                parcel_item = rc(list(item_descriptions.keys()))
-                parcel_description = item_descriptions[parcel_item]
-                parcel = Parcel(
-                    parcel_item=parcel_item,
-                    parcel_description=parcel_description,
-                    parcel_weight=round(fake.random_number(digits=2), 2),
-                    parcel_cost=round(fake.random_number(digits=2), 2),
-                    parcel_status=rc(['Pending', 'In Transit', 'Delivered']),
-                    user_id=user.id,
-                    destination_id=rc([d.id for d in Destination.query.all()])
-                )
-                db.session.add(parcel)
-
         db.session.commit()
-        print("Seeding complete.")
+
+         # Seed Parcels
+        parcels = []
+        for user in users:
+            parcel = Parcel(
+                parcel_item=fake.word(),
+                parcel_description=fake.text(max_nb_chars=200),
+                parcel_weight=rc([1.0, 2.5, 5.0, 10.0, 20.0]),
+                parcel_cost=rc([50.0, 100.0, 200.0, 300.0]),
+                parcel_status=rc(['Pending', 'Shipped', 'Delivered']),
+                user_id=user.id
+            )
+            parcels.append(parcel)
+        db.session.add_all(parcels)
+        db.session.commit()  # Commit parcels to assign IDs
+
+        # Seed Destinations
+        for parcel in parcels:
+            destination = Destination(
+                location=fake.city(),
+                arrival_day=fake.date_time_between(start_date='-30d', end_date='+30d'),
+                parcel_id=parcel.id  # Link destination to parcel
+            )
+            db.session.add(destination)
+
+        # Commit all changes
+            db.session.commit()
+        print("Data seeded successfully!")
+
+
+
+
+
+
+
+
+
+
