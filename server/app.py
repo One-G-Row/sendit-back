@@ -81,7 +81,10 @@ class Users(Resource):
         user = User.query.get(user_id)
         if not user:
             return make_response(jsonify({'error': 'User not found'}), 404)
-        
+        if 'first_name' in data:
+            user.first_name = data['first_name']
+        if 'last_name' in data:
+            user.last_name = data['last_name']
         if 'email' in data:
             user.email = data['email']
         if 'password' in data:
@@ -97,7 +100,7 @@ class Users(Resource):
         
         db.session.delete(user)
         db.session.commit()
-        return '', 204
+        return {}, 204
 
 class UserList(Resource):
     def get(self):
@@ -109,13 +112,20 @@ class UserList(Resource):
         if not data:
             return {'error': 'No data provided'}, 400
         try:
+           if 'password' not in data:
+               return {'error': 'Password is required'}, 400
+
            hashed_password = generate_password_hash(data['password'])
            user = User(
+              first_name = data['first_name'],
+              last_name = data['last_name'],
               email = data['email'],
-              password_hash = hashed_password
+              password = hashed_password
            )
            db.session.add(user)
            db.session.commit() 
+           return make_response(jsonify(user.to_dict(), 201))
+        
         except Exception as e:
            print("Error:", e) 
            db.session.rollback()
