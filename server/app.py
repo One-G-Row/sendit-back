@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, make_response, session
 from flask_restful import Resource
 from models import Destination, User, Parcel, Admin
 from config import db, api, app
+from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
 
@@ -291,38 +292,47 @@ def get_destination(destination_id):
     return jsonify(destination.to_dict()), 200
 
 @app.route('/destinations', methods=['POST'])
-@jwt_required()
+#@jwt_required()
 def create_destination():
     data = request.get_json()
-    if not data or not data.get('name') or not data.get('location'):
+    if not data or not data.get('location') or not data.get('arrival_day'):
         return jsonify({'message': 'Missing destination information'}), 400
 
+    try:
+        arrival_day = datetime.strptime(data.get('arrival_day'), '%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD HH:MM:SS'}), 400
+
     new_destination = Destination(
-        name=data.get('name'),
-        location=data.get('location')
+        location=data.get('location'),
+        arrival_day = arrival_day
     )
     db.session.add(new_destination)
     db.session.commit()
     return jsonify({'message': 'Destination created successfully'}), 201
 
 @app.route('/destinations/<int:destination_id>', methods=['PUT'])
-@jwt_required()
+#@jwt_required()
 def update_destination(destination_id):
     data = request.get_json()
     destination = Destination.query.get(destination_id)
     if not destination:
         return jsonify({'message': 'Destination not found'}), 404
 
-    if 'name' in data:
-        destination.name = data['name']
     if 'location' in data:
         destination.location = data['location']
+    if 'arrival_day' in data:
+        try:
+            arrival_day = datetime.strptime(data['arrival_day'], '%Y-%m-%d %H:%M:%S')
+            destination.arrival_day = arrival_day
+        except ValueError:
+            return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD HH:MM:SS'}), 400
 
     db.session.commit()
     return jsonify({'message': 'Destination updated successfully'}), 200
 
 @app.route('/destinations/<int:destination_id>', methods=['DELETE'])
-@jwt_required()
+#@jwt_required()
 def delete_destination(destination_id):
     destination = Destination.query.get(destination_id)
     if not destination:
