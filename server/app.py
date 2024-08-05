@@ -183,7 +183,7 @@ def create_parcel():
     return jsonify({'message': 'Parcel created successfully'}), 201
 
 @app.route('/parcels/<int:parcel_id>', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     return jsonify({
@@ -198,7 +198,7 @@ def get_parcel(parcel_id):
     }), 200
 
 @app.route('/parcels/<int:parcel_id>', methods=['PUT'])
-@jwt_required()
+#@jwt_required()
 def update_parcel(parcel_id):
     data = request.get_json()
     parcel = Parcel.query.get_or_404(parcel_id)
@@ -224,7 +224,7 @@ def update_parcel(parcel_id):
     return jsonify({'message': 'Parcel updated successfully'}), 200
 
 @app.route('/parcels/<int:parcel_id>', methods=['DELETE'])
-@jwt_required()
+#@jwt_required()
 def delete_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     current_user = get_jwt_identity()
