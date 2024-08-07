@@ -173,7 +173,7 @@ class MyOrders(Resource):
            db.session.rollback()
            return {'error': str(e)}, 400
         
-        def delete(self, myorder_id):
+    def delete(self, myorder_id):
             myorder = MyOrder.query.get(myorder_id)
             db.session.delete(myorder)
             db.commit()
