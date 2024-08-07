@@ -240,19 +240,26 @@ def delete_parcel(parcel_id):
 @app.route('/admin/register', methods=['POST'])
 def admin_register():
     data = request.get_json()
-    if Admin.query.filter_by(email=data['email']).first():
-        return jsonify({'message': 'Admin already exists'}), 400
+    try:
+        # Access fields using the names from the client-side
+        if Admin.query.filter_by(email=data['email']).first():
+            return jsonify({'message': 'Admin already exists'}), 400
 
-    hashed_password = generate_password_hash(data['password'])
-    new_admin = Admin(
-        first_name=data['first_name'],
-        last_name=data['last_name'],
-        email=data['email'],
-        password_hash=hashed_password
-    )
-    db.session.add(new_admin)
-    db.session.commit()
-    return jsonify({'message': 'Admin created successfully'}), 201
+        hashed_password = generate_password_hash(data['password'])
+        new_admin = Admin(
+            first_name=data['first_name'],  
+            last_name=data['last_name'],    
+            email=data['email'],
+            password_hash=hashed_password
+        )
+        db.session.add(new_admin)
+        db.session.commit()
+        return jsonify({'message': 'Admin created successfully'}), 201
+    except Exception as e:
+        print(f"Error occurred: {e}")  # Log the error
+        return jsonify({'message': 'An error occurred while creating the admin'}), 500
+
+
 
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
