@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, make_response, session
 from flask_restful import Resource
-from models import Destination, User, Parcel, Admin
+from models import Destination, User, Parcel, Admin, MyOrder
 from config import db, api, app
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
@@ -131,6 +131,13 @@ class UserList(Resource):
            db.session.rollback()
            return {'error': str(e)}, 400
     
+class MyOrders(Resource):
+    def get(self, myorder_id):
+        myorder = MyOrder.query.get(myorder_id)
+        return make_response(jsonify(myorder.to_dict), 200)
+    
+    
+
 api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
 api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')

@@ -18,6 +18,7 @@ class Parcel(db.Model):
     
     destination = db.relationship('Destination', back_populates='parcel')
     user = db.relationship('User', back_populates='parcels')
+    myorder = db.relationship('MyOrder', back_populates='parcel')
 
 class Destination(db.Model, SerializerMixin):
     __tablename__ = 'destinations'
@@ -75,3 +76,15 @@ class Admin(db.Model,SerializerMixin):
     
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class MyOrder(db.Model, SerializerMixin):
+    __tablename__ = 'myorders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    destination = db.Column(db.String(50), nullable=False)
+    
+    parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
+    parcel = db.relationship('Parcel', back_populates='myorder')
