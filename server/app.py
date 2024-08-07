@@ -135,8 +135,67 @@ class MyOrders(Resource):
     def get(self, myorder_id):
         myorder = MyOrder.query.get(myorder_id)
         return make_response(jsonify(myorder.to_dict), 200)
+
+    def patch(self, myorder_id):
+        data = request.get_json()
+        myorder = MyOrder.query.get(myorder_id)
+        if not myorder:
+            return make_response(jsonify({'error': 'MyOrder not found'}), 404)
+        if 'item' in data:
+            myorder.item = data['item']
+        if 'description' in data:
+            myorder.description = data['description']
+        if 'weight' in data:
+            myorder.weight = data['weight']
+        if 'destination' in data:
+            myorder.destination = data['destination']
+        
+        db.session.commit()
+        return make_response(jsonify(myorder.to_dict()), 200)
     
-    
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+           myorder = MyOrder(
+              item = data['item'],
+              description = data['description'],
+              weight = data['weight'],
+              destination = data['destination']
+           )
+           db.session.add(myorder)
+           db.session.commit() 
+           return make_response(jsonify(myorder.to_dict(), 201))
+        
+        except Exception as e:
+           print("Error:", e) 
+           db.session.rollback()
+           return {'error': str(e)}, 400
+        
+        def delete(self, myorder_id):
+            myorder = MyOrder.query.get(myorder_id)
+            db.session.delete(myorder)
+            db.commit()
+            return '', 204
+        
+class MyOrdersList(Resource):
+    def get(self):
+        myorders = MyOrder.query.all()
+        return make_response(jsonify(myorders), 200)
+
+    def post(self):
+        data = request.get.json()
+        new_myorder = MyOrder(
+            item = data['item'],
+            description = data['description'],
+            weight = data['weight'],
+            destination = data['destination']
+        )
+        db.session.add(new_myorder)
+        db.session.commit()    
+        response = new_myorder.to_dict()  
+        return jsonify(response), 201
 
 api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
 api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
@@ -146,6 +205,8 @@ api.add_resource(ClearSession, '/clear', endpoint='clear')
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(UserList, '/users', endpoint='users')
 api.add_resource(Users, '/users/<int:user_id>', endpoint='user')
+api.add_resource(MyOrders, '/myorders/<int:myorder_id>', endpoint='myorder')
+api.add_resource(MyOrdersList, '/myorders', endpoint='myorders')
 
 # Define Admin-related endpoints
 class Admins(Resource):
