@@ -43,6 +43,7 @@ class User(db.Model, SerializerMixin):
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     _password_hash = db.Column(db.String(255), nullable=False)
+    
     parcels = db.relationship('Parcel', back_populates='user')
     
     @property

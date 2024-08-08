@@ -5,6 +5,8 @@ from config import db, api, app
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import  create_access_token, jwt_required, get_jwt_identity
+from functools import wraps
+from flask import redirect, url_for, session
 
 class ClearSession(Resource):
     def delete(self):
@@ -284,6 +286,36 @@ def admin_change_status(parcel_id):
     parcel.parcel_status = data['parcel_status']
     db.session.commit()
     return jsonify({'message': 'Status updated successfully'}), 200
+
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('admin_id'):
+            return redirect(url_for('loginadmin'))  # Redirect to admin login
+        return f(*args, **kwargs)
+    return decorated_function
+
+def user_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('user_id'):
+            return redirect(url_for('loginuser'))  # Redirect to user login
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/all_orders')
+@admin_required
+def all_orders():
+    parcels = Parcel.query.all()
+    return jsonify([parcel.to_dict() for parcel in parcels]), 200
+
+@app.route('/my_orders')
+@user_required
+def my_orders():
+    user_id = session.get('user_id')
+    parcels = Parcel.query.filter_by(user_id=user_id).all()
+    return jsonify([parcel.to_dict() for parcel in parcels]), 200
 
 # Define destination-related endpoints
 @app.route('/destinations/', methods=['GET'])
