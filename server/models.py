@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
-class Parcel(db.Model):
+class Parcel(db.Model,SerializerMixin):
     __tablename__ = 'parcels'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -88,4 +88,5 @@ class MyOrder(db.Model, SerializerMixin):
     
     parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
     parcel = db.relationship('Parcel', back_populates='myorder')
+
 

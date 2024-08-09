@@ -59,8 +59,7 @@ if __name__ == '__main__':
                 parcel_weight=rc([1.0, 2.5, 5.0, 10.0, 20.0]),
                 parcel_cost=rc([50.0, 100.0, 200.0, 300.0]),
                 parcel_status=rc(['Pending', 'Shipped', 'Delivered']),
-                user_id=user.id,
-                destination_id=destination.id
+                user_id=user.id
             )
             parcels.append(parcel)
         db.session.add_all(parcels)
