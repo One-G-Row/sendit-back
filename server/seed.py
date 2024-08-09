@@ -1,7 +1,7 @@
 
 from random import randint, choice as rc
 from faker import Faker
-from app import app
+from server.app import app
 from models import db, Parcel, Destination, User, Admin
 
 if __name__ == '__main__':

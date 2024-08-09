@@ -1,5 +1,5 @@
 import pytest
-from app import app, db
+from server.app import app, db
 from models import User
 from flask_jwt_extended import create_access_token
 

@@ -1,5 +1,5 @@
 import pytest
-from app import app, db, bcrypt
+from server.app import app, db, bcrypt
 from models import Admin, Parcel,User, Destination
 from flask_jwt_extended import create_access_token
 

@@ -89,11 +89,3 @@ class MyOrder(db.Model, SerializerMixin):
     parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
     parcel = db.relationship('Parcel', back_populates='myorder')
 
-    """ def to_dict(self):
-        return {
-            'id': self.id,
-            'item': self.item,
-            'description': self.description,
-            'weight': self.weight,
-            'destination': self.destination
-        }  """
