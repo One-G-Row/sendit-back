@@ -184,8 +184,23 @@ def create_parcel():
     db.session.commit()
     return jsonify({'message': 'Parcel created successfully'}), 201
 
+@app.route('/parcels', methods=['GET'])
+# @jwt_required()  # Require authentication if necessary
+def get_parcels():
+    parcels = Parcel.query.all()
+    return jsonify([{
+        'id': parcel.id,
+        'parcel_item': parcel.parcel_item,
+        'parcel_description': parcel.parcel_description,
+        'parcel_weight': parcel.parcel_weight,
+        'parcel_cost': parcel.parcel_cost,
+        'parcel_status': parcel.parcel_status,
+        'user_id': parcel.user_id,
+        'destination_id': parcel.destination_id
+    } for parcel in parcels]), 200
+
 @app.route('/parcels/<int:parcel_id>', methods=['GET'])
-#@jwt_required()
+# @jwt_required()  # Require authentication if necessary
 def get_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     return jsonify({
@@ -200,7 +215,7 @@ def get_parcel(parcel_id):
     }), 200
 
 @app.route('/parcels/<int:parcel_id>', methods=['PUT'])
-#@jwt_required()
+# @jwt_required()
 def update_parcel(parcel_id):
     data = request.get_json()
     parcel = Parcel.query.get_or_404(parcel_id)
@@ -226,7 +241,7 @@ def update_parcel(parcel_id):
     return jsonify({'message': 'Parcel updated successfully'}), 200
 
 @app.route('/parcels/<int:parcel_id>', methods=['DELETE'])
-#@jwt_required()
+# @jwt_required()
 def delete_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     current_user = get_jwt_identity()
