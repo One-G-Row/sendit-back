@@ -91,6 +91,7 @@ class Users(Resource):
         if 'password' in data:
             user.password_hash = generate_password_hash(data['password'])
         
+        db.session.add(user)
         db.session.commit()
         return make_response(jsonify(user.to_dict()), 200)
     
@@ -135,7 +136,7 @@ class UserList(Resource):
 class MyOrders(Resource):
     def get(self, myorder_id):
         myorder = MyOrder.query.get(myorder_id)
-        return make_response(jsonify(myorder.to_dict), 200)
+        return make_response(jsonify(myorder.to_dict()), 200)
 
     def patch(self, myorder_id):
         data = request.get_json()
@@ -151,8 +152,40 @@ class MyOrders(Resource):
         if 'destination' in data:
             myorder.destination = data['destination']
         
+        db.session.add(myorder)
         db.session.commit()
         return make_response(jsonify(myorder.to_dict()), 200)
+    
+    """ def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'No data provided'}, 400
+        try:
+           myorder = MyOrder(
+              item = data['item'],
+              description = data['description'],
+              weight = data['weight'],
+              destination = data['destination']
+           )
+           db.session.add(myorder)
+           db.session.commit() 
+           return make_response(jsonify(myorder.to_dict(), 201))
+        
+        except Exception as e:
+           print("Error:", e) 
+           db.session.rollback()
+           return {'error': str(e)}, 400
+         """
+    def delete(self, myorder_id):
+            myorder = MyOrder.query.get(myorder_id)
+            db.session.delete(myorder)
+            db.session.commit()
+            return '', 204
+        
+class MyOrdersList(Resource):
+    def get(self):
+        myorders = [myorder.to_dict() for myorder in MyOrder.query.all()]
+        return make_response(jsonify(myorders), 200)
     
     def post(self):
         data = request.get_json()
@@ -173,20 +206,9 @@ class MyOrders(Resource):
            print("Error:", e) 
            db.session.rollback()
            return {'error': str(e)}, 400
-        
-    def delete(self, myorder_id):
-            myorder = MyOrder.query.get(myorder_id)
-            db.session.delete(myorder)
-            db.commit()
-            return '', 204
-        
-class MyOrdersList(Resource):
-    def get(self):
-        myorders = MyOrder.query.all()
-        return make_response(jsonify(myorders), 200)
-
-    def post(self):
-        data = request.get.json()
+         
+    """ def post(self):
+        data = request.get_json()
         new_myorder = MyOrder(
             item = data['item'],
             description = data['description'],
@@ -196,7 +218,7 @@ class MyOrdersList(Resource):
         db.session.add(new_myorder)
         db.session.commit()    
         response = new_myorder.to_dict()  
-        return jsonify(response), 201
+        return make_response(jsonify(response)), 201 """
 
 api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
 api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
