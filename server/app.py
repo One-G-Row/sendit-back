@@ -156,26 +156,6 @@ class MyOrders(Resource):
         db.session.commit()
         return make_response(jsonify(myorder.to_dict()), 200)
     
-    """ def post(self):
-        data = request.get_json()
-        if not data:
-            return {'error': 'No data provided'}, 400
-        try:
-           myorder = MyOrder(
-              item = data['item'],
-              description = data['description'],
-              weight = data['weight'],
-              destination = data['destination']
-           )
-           db.session.add(myorder)
-           db.session.commit() 
-           return make_response(jsonify(myorder.to_dict(), 201))
-        
-        except Exception as e:
-           print("Error:", e) 
-           db.session.rollback()
-           return {'error': str(e)}, 400
-         """
     def delete(self, myorder_id):
             myorder = MyOrder.query.get(myorder_id)
             db.session.delete(myorder)
@@ -207,18 +187,6 @@ class MyOrdersList(Resource):
            db.session.rollback()
            return {'error': str(e)}, 400
          
-    """ def post(self):
-        data = request.get_json()
-        new_myorder = MyOrder(
-            item = data['item'],
-            description = data['description'],
-            weight = data['weight'],
-            destination = data['destination']
-        )
-        db.session.add(new_myorder)
-        db.session.commit()    
-        response = new_myorder.to_dict()  
-        return make_response(jsonify(response)), 201 """
 
 api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
 api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
