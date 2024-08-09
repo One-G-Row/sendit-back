@@ -218,6 +218,20 @@ api.add_resource(Admins, '/admins', '/admins/<int:admin_id>')
 def home():
     return jsonify({'message': 'Welcome to the SendIT API!'}), 200
 
+@app.route('/parcels', methods=['GET'])
+# @jwt_required()  # Require authentication if necessary
+def get_parcels():
+    parcels = Parcel.query.all()
+    return jsonify([{
+        'id': parcel.id,
+        'parcel_item': parcel.parcel_item,
+        'parcel_description': parcel.parcel_description,
+        'parcel_weight': parcel.parcel_weight,
+        'parcel_cost': parcel.parcel_cost,
+        'parcel_status': parcel.parcel_status,
+        'user_id': parcel.user_id,
+        'destination_id': parcel.destination_id
+    } for parcel in parcels]), 200
 # Define parcel-related endpoints
 @app.route('/parcels', methods=['POST'])
 @jwt_required()
