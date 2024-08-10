@@ -25,7 +25,7 @@ class Signup(Resource):
                 first_name = data['first_name'],
                 last_name = data['last_name'],
                 email = data['email'],
-                password_hash = hashed_password
+                password = hashed_password
             )
             db.session.add(user)
             db.session.commit()
