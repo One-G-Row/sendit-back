@@ -85,7 +85,9 @@ class MyOrder(db.Model, SerializerMixin):
     description = db.Column(db.String(255), nullable=False)
     weight = db.Column(db.Float, nullable=False)
     destination = db.Column(db.String(50), nullable=False)
-    
+    recipient_name = db.Column(db.String(50), nullable=True)
+    recipient_contact = db.Column(db.Integer, nullable=False, default=0)
+
     parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
     parcel = db.relationship('Parcel', back_populates='myorder')
 

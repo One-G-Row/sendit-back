@@ -25,7 +25,7 @@ class Signup(Resource):
                 first_name = data['first_name'],
                 last_name = data['last_name'],
                 email = data['email'],
-                password_hash = hashed_password
+                password = hashed_password
             )
             db.session.add(user)
             db.session.commit()
@@ -151,7 +151,11 @@ class MyOrders(Resource):
             myorder.weight = data['weight']
         if 'destination' in data:
             myorder.destination = data['destination']
-        
+        if 'recipient_name' in data:
+            myorder.recipient_name = data['recipient_name']
+        if 'recipient_contact' in data:
+            myorder.recipient_contact = data['recipient_contact']
+
         db.session.add(myorder)
         db.session.commit()
         return make_response(jsonify(myorder.to_dict()), 200)
@@ -176,7 +180,9 @@ class MyOrdersList(Resource):
               item = data['item'],
               description = data['description'],
               weight = data['weight'],
-              destination = data['destination']
+              destination = data['destination'],
+              recipient_name = data['recipient_name'],
+              recipient_contact = data['recipient_contact']
            )
            db.session.add(myorder)
            db.session.commit() 
