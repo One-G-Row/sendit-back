@@ -56,8 +56,9 @@ class LoginUser(Resource):
            
 class LoginAdmin(Resource):
     def post(self):
-        admin = Admin.query.filter(Admin.email == request.get_json())['email'].first()
-        if admin:
+        data = request.get_json()
+        admin = Admin.query.filter(Admin.email == data['email']).first()
+        if admin and check_password_hash(admin.password_hash, data['password']):
             session['admin_id'] = admin.id
             response = make_response(jsonify(admin.to_dict()), 200)
             return response
@@ -219,7 +220,6 @@ def home():
     return jsonify({'message': 'Welcome to the SendIT API!'}), 200
 
 @app.route('/parcels', methods=['GET'])
-# @jwt_required()  # Require authentication if necessary
 def get_parcels():
     parcels = Parcel.query.all()
     return jsonify([{
@@ -232,13 +232,16 @@ def get_parcels():
         'user_id': parcel.user_id,
         'destination_id': parcel.destination_id
     } for parcel in parcels]), 200
+
 # Define parcel-related endpoints
 @app.route('/parcels', methods=['POST'])
-@jwt_required()
 def create_parcel():
     data = request.get_json()
-    if not data or not data.get('parcel_item') or not data.get('parcel_weight'):
-        return jsonify({'message': 'Missing parcel information'}), 400
+    required_fields = ['parcel_item', 'parcel_weight', 'destination_id']
+
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'message': f'Missing {field}'}), 400
 
     current_user = get_jwt_identity()
     new_parcel = Parcel(
@@ -255,7 +258,6 @@ def create_parcel():
     return jsonify({'message': 'Parcel created successfully'}), 201
 
 @app.route('/parcels/<int:parcel_id>', methods=['GET'])
-#@jwt_required()
 def get_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     return jsonify({
@@ -269,16 +271,10 @@ def get_parcel(parcel_id):
         'destination_id': parcel.destination_id
     }), 200
 
-@app.route('/parcels/<int:parcel_id>', methods=['PUT'])
-#@jwt_required()
+@app.route('/parcels/<int:parcel_id>', methods=['PATCH'])
 def update_parcel(parcel_id):
     data = request.get_json()
     parcel = Parcel.query.get_or_404(parcel_id)
-    current_user = get_jwt_identity()
-
-    if parcel.user_id != current_user['id']:
-        return jsonify({'message': 'Unauthorized'}), 403
-
     if 'parcel_item' in data:
         parcel.parcel_item = data['parcel_item']
     if 'parcel_description' in data:
@@ -287,26 +283,19 @@ def update_parcel(parcel_id):
         parcel.parcel_weight = data['parcel_weight']
     if 'parcel_cost' in data:
         parcel.parcel_cost = data['parcel_cost']
-    if 'destination_id' in data:
-        parcel.destination_id = data['destination_id']
     if 'parcel_status' in data:
         parcel.parcel_status = data['parcel_status']
-
+    if 'destination_id' in data:
+        parcel.destination_id = data['destination_id']
     db.session.commit()
     return jsonify({'message': 'Parcel updated successfully'}), 200
 
 @app.route('/parcels/<int:parcel_id>', methods=['DELETE'])
-#@jwt_required()
 def delete_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
-    current_user = get_jwt_identity()
-
-    if parcel.user_id != current_user['id']:
-        return jsonify({'message': 'Unauthorized'}), 403
-
     db.session.delete(parcel)
     db.session.commit()
-    return jsonify({'message': 'Parcel deleted successfully'}), 200
+    return jsonify({'message': 'Parcel deleted successfully'}), 204
 
 # Define admin-related authentication endpoints
 @app.route('/admin/register', methods=['POST'])
@@ -344,7 +333,7 @@ def admin_login():
     return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
-@jwt_required()
+# @jwt_required()
 def admin_change_status(parcel_id):
     data = request.get_json()
     current_user_id = get_jwt_identity()
@@ -353,73 +342,65 @@ def admin_change_status(parcel_id):
         return jsonify({'message': 'You are not an admin'}), 403
     
     parcel = Parcel.query.get_or_404(parcel_id)
-    parcel.parcel_status = data['parcel_status']
+    if 'parcel_status' in data:
+        parcel.parcel_status = data['parcel_status']
+    if 'destination_id' in data:
+        parcel.destination_id = data['destination_id']  # Ensure destination_id is also updated if needed
+
     db.session.commit()
     return jsonify({'message': 'Status updated successfully'}), 200
 
+
 # Define destination-related endpoints
-@app.route('/destinations/', methods=['GET'])
+@app.route('/destinations', methods=['GET'])
 def get_destinations():
-    destinations = [destination.to_dict() for destination in Destination.query.all()]
-    return make_response(jsonify(destinations), 200)
+    destinations = Destination.query.all()
+    return jsonify([{
+        'id': destination.id,
+        'destination_name': destination.destination_name,
+        'destination_address': destination.destination_address
+    } for destination in destinations]), 200
 
 @app.route('/destinations/<int:destination_id>', methods=['GET'])
 def get_destination(destination_id):
-    destination = Destination.query.get(destination_id)
-    if not destination:
-        return jsonify({'message': 'Destination not found'}), 404
-    return jsonify(destination.to_dict()), 200
+    destination = Destination.query.get_or_404(destination_id)
+    return jsonify({
+        'id': destination.id,
+        'destination_name': destination.destination_name,
+        'destination_address': destination.destination_address
+    }), 200
 
 @app.route('/destinations', methods=['POST'])
-#@jwt_required()
 def create_destination():
     data = request.get_json()
-    if not data or not data.get('location') or not data.get('arrival_day'):
-        return jsonify({'message': 'Missing destination information'}), 400
-
-    try:
-        arrival_day = datetime.strptime(data.get('arrival_day'), '%Y-%m-%d %H:%M:%S')
-    except ValueError:
-        return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD HH:MM:SS'}), 400
-
+    if not data or 'destination_name' not in data or 'destination_address' not in data:
+        return jsonify({'message': 'Invalid data'}), 400
     new_destination = Destination(
-        location=data.get('location'),
-        arrival_day = arrival_day
+        destination_name=data['destination_name'],
+        destination_address=data['destination_address']
     )
     db.session.add(new_destination)
     db.session.commit()
     return jsonify({'message': 'Destination created successfully'}), 201
 
-@app.route('/destinations/<int:destination_id>', methods=['PUT'])
-#@jwt_required()
+@app.route('/destinations/<int:destination_id>', methods=['PATCH'])
 def update_destination(destination_id):
     data = request.get_json()
-    destination = Destination.query.get(destination_id)
-    if not destination:
-        return jsonify({'message': 'Destination not found'}), 404
-
-    if 'location' in data:
-        destination.location = data['location']
-    if 'arrival_day' in data:
-        try:
-            arrival_day = datetime.strptime(data['arrival_day'], '%Y-%m-%d %H:%M:%S')
-            destination.arrival_day = arrival_day
-        except ValueError:
-            return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD HH:MM:SS'}), 400
-
+    destination = Destination.query.get_or_404(destination_id)
+    if 'destination_name' in data:
+        destination.destination_name = data['destination_name']
+    if 'destination_address' in data:
+        destination.destination_address = data['destination_address']
     db.session.commit()
     return jsonify({'message': 'Destination updated successfully'}), 200
 
-@app.route('/destinations/<int:destination_id>', methods=['DELETE'])
-#@jwt_required()
-def delete_destination(destination_id):
-    destination = Destination.query.get(destination_id)
-    if not destination:
-        return jsonify({'message': 'Destination not found'}), 404
 
+@app.route('/destinations/<int:destination_id>', methods=['DELETE'])
+def delete_destination(destination_id):
+    destination = Destination.query.get_or_404(destination_id)
     db.session.delete(destination)
     db.session.commit()
-    return jsonify({'message': 'Destination deleted successfully'}), 200
+    return jsonify({'message': 'Destination deleted successfully'}), 204
 
 if __name__ == '__main__':
     with app.app_context():
