@@ -140,6 +140,14 @@ class MyOrders(Resource):
         if not myorder:
             return make_response(jsonify({'error': 'MyOrder not found'}), 404)
         return make_response(jsonify(myorder.to_dict()), 200)
+    
+    def delete(self, myorder_id):
+        myorder = MyOrder.query.get(myorder_id)
+        if not myorder:
+            return make_response(jsonify({'error': 'MyOrder not found'}), 404)
+        
+        db.session.delete(myorder)
+
 
     def post(self):
         data = request.get_json()
