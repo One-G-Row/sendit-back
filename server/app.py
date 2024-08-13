@@ -151,6 +151,8 @@ class MyOrders(Resource):
             myorder.weight = data['weight']
         if 'destination' in data:
             myorder.destination = data['destination']
+        if 'cost' in data:
+            myorder.cost = data['cost']
         if 'recipient_name' in data:
             myorder.recipient_name = data['recipient_name']
         if 'recipient_contact' in data:
@@ -181,6 +183,7 @@ class MyOrdersList(Resource):
               description = data['description'],
               weight = data['weight'],
               destination = data['destination'],
+              cost = data['cost'],
               recipient_name = data['recipient_name'],
               recipient_contact = data['recipient_contact']
            )
@@ -251,10 +254,7 @@ def create_parcel():
         parcel_item=data.get('parcel_item'),
         parcel_description=data.get('parcel_description'),
         parcel_weight=data.get('parcel_weight'),
-        parcel_cost=data.get('parcel_cost'),
-        parcel_status='Pending',
-        user_id=current_user['id'],
-        destination_id=data.get('destination_id')
+    
     )
     db.session.add(new_parcel)
     db.session.commit()
@@ -293,6 +293,24 @@ def update_parcel(parcel_id):
         parcel.parcel_weight = data['parcel_weight']
     if 'parcel_cost' in data:
         parcel.parcel_cost = data['parcel_cost']
+    if 'destination_id' in data:
+        parcel.destination_id = data['destination_id']
+    if 'parcel_status' in data:
+        parcel.parcel_status = data['parcel_status']
+
+    db.session.commit()
+    return jsonify({'message': 'Parcel updated successfully'}), 200
+
+""" check patch endpoint if it is working on postman """
+@app.route('/parcels/<int:parcel_id>', methods=['PATCH'])
+#@jwt_required()
+def patch_parcel(parcel_id):
+    data = request.get_json()
+    parcel = Parcel.query.get_or_404(parcel_id)
+    current_user = get_jwt_identity()
+
+    if parcel.user_id != current_user['id']:
+        return jsonify({'message': 'Unauthorized'}), 403
     if 'destination_id' in data:
         parcel.destination_id = data['destination_id']
     if 'parcel_status' in data:
