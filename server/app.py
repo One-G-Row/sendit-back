@@ -143,10 +143,9 @@ class MyOrders(Resource):
     
     def delete(self, myorder_id):
         myorder = MyOrder.query.get(myorder_id)
-        if not myorder:
-            return make_response(jsonify({'error': 'MyOrder not found'}), 404)
-        
         db.session.delete(myorder)
+        db.session.commit()
+        return '', 204
 
 
     def post(self):
@@ -189,6 +188,7 @@ class MyOrders(Resource):
             myorder.weight = data['weight']
         if 'destination' in data:
             myorder.destination = data['destination']
+            myorder.cost = self.calculate_cost(data['destination'], myorder.weight)
         if 'cost' in data:
             myorder.cost = data['cost']
         if 'recipient_name' in data:
@@ -202,6 +202,14 @@ class MyOrders(Resource):
         
         return make_response(jsonify(myorder.to_dict()), 200)
 
+    def calculate_cost(self, destination, weight):
+        base_cost = 10
+        cost_per_kg = 2
+        destination_multiplier = self.get_destination_multiplier(destination)
+        return base_cost + (weight * cost_per_kg * destination_multiplier)
+    
+    def get_destination_multiplier(self, destination):
+        return 1.5
         
 class MyOrdersList(Resource):
     def get(self):
@@ -323,12 +331,22 @@ def update_parcel(parcel_id):
         parcel.parcel_weight = data['parcel_weight']
     if 'parcel_cost' in data:
         parcel.parcel_cost = data['parcel_cost']
+    if 'destination_id' in data:
+        parcel.destination_id = data['destination_id']
+        parcel.parcel_cost = calculate_parcel_cost(parcel.destination_id, parcel.parcel_weight)
     if 'parcel_status' in data:
         parcel.parcel_status = data['parcel_status']
     if 'destination_id' in data:
         parcel.destination_id = data['destination_id']
     db.session.commit()
     return jsonify({'message': 'Parcel updated successfully'}), 200
+
+def calculate_parcel_cost(destination_id, weight):
+    base_cost = 10
+    cost_per_kg = 2
+    destination = Destination.query.get(destination_id)
+    destination_multiplier = 1.5 if destination else 1
+    return base_cost + (weight * cost_per_kg * destination_multiplier)
 
 """ check patch endpoint if it is working on postman """
 @app.route('/parcels/<int:parcel_id>', methods=['PATCH'])
