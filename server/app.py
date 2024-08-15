@@ -152,7 +152,7 @@ class MyOrders(Resource):
         data = request.get_json()
 
         # Validate the incoming data
-        required_fields = ['item', 'description', 'weight', 'destination', 'recipient_name', 'recipient_contact']
+        required_fields = ['item', 'description', 'weight', 'destination', 'status', 'recipient_name', 'recipient_contact']
         for field in required_fields:
             if field not in data:
                 return make_response(jsonify({'error': f'Missing {field}'}), 400)
@@ -163,16 +163,21 @@ class MyOrders(Resource):
             description=data['description'],
             weight=data['weight'],
             destination=data['destination'],
+            status=data['status'],
             recipient_name=data['recipient_name'],
-            recipient_contact=data['recipient_contact']
+            recipient_contact=data['recipient_contact'],
+            cost=self.calculate_cost(data['destination'], data['weight'])  
         )
-
         # Add and commit the new order to the database
-        db.session.add(new_order)
-        db.session.commit()
-
-        return make_response(jsonify(new_order.to_dict()), 201)
-
+        try:
+            db.session.add(new_order)
+            db.session.commit()
+            return make_response(jsonify(new_order.to_dict()), 201)
+        except Exception as e:
+            db.session.rollback()
+            print("Error:", e)
+            return {'error': str(e)}, 400
+        
     def patch(self, myorder_id):
         data = request.get_json()
         myorder = MyOrder.query.get(myorder_id)
@@ -191,6 +196,8 @@ class MyOrders(Resource):
             myorder.cost = self.calculate_cost(data['destination'], myorder.weight)
         if 'cost' in data:
             myorder.cost = data['cost']
+        if 'status' in data:
+            myorder.status = data['status']
         if 'recipient_name' in data:
             myorder.recipient_name = data['recipient_name']
         if 'recipient_contact' in data:
@@ -227,6 +234,7 @@ class MyOrdersList(Resource):
               weight = data['weight'],
               destination = data['destination'],
               cost = data['cost'],
+              status = data['status'],
               recipient_name = data['recipient_name'],
               recipient_contact = data['recipient_contact']
            )

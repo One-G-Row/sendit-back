@@ -96,6 +96,7 @@ class MyOrder(db.Model, SerializerMixin):
     weight = db.Column(db.Float, nullable=False)
     destination = db.Column(db.String(50), nullable=False)
     cost = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.String(50), nullable=False)
     recipient_name = db.Column(db.String(50), nullable=True)
     recipient_contact = db.Column(db.Integer, nullable=False, default=0)
 
