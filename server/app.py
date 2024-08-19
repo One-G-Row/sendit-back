@@ -203,6 +203,7 @@ class MyOrders(Resource):
         if 'recipient_contact' in data:
             myorder.recipient_contact = data['recipient_contact']
 
+ 
         # Commit the updated order to the database
         db.session.add(myorder)
         db.session.commit()
