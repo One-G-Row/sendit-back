@@ -8,3 +8,4 @@ Werkzeug==2.1.1
 Faker==13.3.1
 gunicorn
 flask_restful
+flask_cors
