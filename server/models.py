@@ -1,6 +1,6 @@
 from flask import Flask, session
 from config import db, bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
+from server.utils import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
