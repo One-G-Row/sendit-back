@@ -249,16 +249,16 @@ class MyOrdersList(Resource):
            return {'error': str(e)}, 400
          
 
-api.add_resource(LoginUser, '/loginuser', endpoint='loginuser')
-api.add_resource(LoginAdmin, '/loginadmin', endpoint='loginadmin')
-api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-api.add_resource(Logout, '/logout', endpoint='logout')
-api.add_resource(ClearSession, '/clear', endpoint='clear')
-api.add_resource(Signup, '/signup', endpoint='signup')
-api.add_resource(UserList, '/users', endpoint='users')
-api.add_resource(Users, '/users/<int:user_id>', endpoint='user')
-api.add_resource(MyOrders, '/myorders/<int:myorder_id>', endpoint='myorder')
-api.add_resource(MyOrdersList, '/myorders', endpoint='myorders')
+api.add_resource(LoginUser, '/api/loginuser', endpoint='loginuser')
+api.add_resource(LoginAdmin, '/api/loginadmin', endpoint='loginadmin')
+api.add_resource(CheckSession, '/api/check_session', endpoint='check_session')
+api.add_resource(Logout, '/api/logout', endpoint='logout')
+api.add_resource(ClearSession, '/api/clear', endpoint='clear')
+api.add_resource(Signup, '/api/signup', endpoint='signup')
+api.add_resource(UserList, '/api/users', endpoint='users')
+api.add_resource(Users, '/api/users/<int:user_id>', endpoint='user')
+api.add_resource(MyOrders, '/api/myorders/<int:myorder_id>', endpoint='myorder')
+api.add_resource(MyOrdersList, '/api/myorders', endpoint='myorders')
 
 # Define Admin-related endpoints
 class Admins(Resource):
@@ -275,11 +275,11 @@ class Admins(Resource):
 api.add_resource(Admins, '/admins', '/admins/<int:admin_id>')
 
 # Define home route
-@app.route('/')
+@app.route('/api/')
 def home():
     return jsonify({'message': 'Welcome to the SendIT API!'}), 200
 
-@app.route('/parcels', methods=['GET'])
+@app.route('/api/parcels', methods=['GET'])
 def get_parcels():
     parcels = Parcel.query.all()
     return jsonify([{
@@ -294,7 +294,7 @@ def get_parcels():
     } for parcel in parcels]), 200
 
 # Define parcel-related endpoints
-@app.route('/parcels', methods=['POST'])
+@app.route('/api/parcels', methods=['POST'])
 def create_parcel():
     data = request.get_json()
     required_fields = ['parcel_item', 'parcel_weight', 'destination_id']
@@ -314,7 +314,7 @@ def create_parcel():
     db.session.commit()
     return jsonify({'message': 'Parcel created successfully'}), 201
 
-@app.route('/parcels/<int:parcel_id>', methods=['GET'])
+@app.route('/api/parcels/<int:parcel_id>', methods=['GET'])
 def get_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     return jsonify({
@@ -328,7 +328,7 @@ def get_parcel(parcel_id):
         'destination_id': parcel.destination_id
     }), 200
 
-@app.route('/parcels/<int:parcel_id>', methods=['PATCH'])
+@app.route('/api/parcels/<int:parcel_id>', methods=['PATCH'])
 def update_parcel(parcel_id):
     data = request.get_json()
     parcel = Parcel.query.get_or_404(parcel_id)
@@ -358,7 +358,7 @@ def calculate_parcel_cost(destination_id, weight):
     return base_cost + (weight * cost_per_kg * destination_multiplier)
 
 """ check patch endpoint if it is working on postman """
-@app.route('/parcels/<int:parcel_id>', methods=['PATCH'])
+@app.route('/api/parcels/<int:parcel_id>', methods=['PATCH'])
 #@jwt_required()
 def patch_parcel(parcel_id):
     data = request.get_json()
@@ -375,7 +375,7 @@ def patch_parcel(parcel_id):
     db.session.commit()
     return jsonify({'message': 'Parcel updated successfully'}), 200
 
-@app.route('/parcels/<int:parcel_id>', methods=['DELETE'])
+@app.route('/api/parcels/<int:parcel_id>', methods=['DELETE'])
 def delete_parcel(parcel_id):
     parcel = Parcel.query.get_or_404(parcel_id)
     db.session.delete(parcel)
@@ -383,7 +383,7 @@ def delete_parcel(parcel_id):
     return jsonify({'message': 'Parcel deleted successfully'}), 204
 
 # Define admin-related authentication endpoints
-@app.route('/admin/register', methods=['POST'])
+@app.route('/api/admin/register', methods=['POST'])
 def admin_register():
     data = request.get_json()
     try:
@@ -407,7 +407,7 @@ def admin_register():
 
 
 
-@app.route('/admin/login', methods=['POST'])
+@app.route('/api/admin/login', methods=['POST'])
 def admin_login():
     data = request.get_json()
     admin = Admin.query.filter_by(email=data['email']).first()
@@ -417,7 +417,7 @@ def admin_login():
         return jsonify({'access_token': access_token}), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 
-@app.route('/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
+@app.route('/api/admin/parcels/<int:parcel_id>/status', methods=['PUT'])
 # @jwt_required()
 def admin_change_status(parcel_id):
     data = request.get_json()
@@ -437,7 +437,7 @@ def admin_change_status(parcel_id):
 
 
 # Define destination-related endpoints
-@app.route('/destinations', methods=['GET'])
+@app.route('/api/destinations', methods=['GET'])
 def get_destinations():
     destinations = Destination.query.all()
     return jsonify([{
@@ -446,7 +446,7 @@ def get_destinations():
         'destination_address': destination.destination_address
     } for destination in destinations]), 200
 
-@app.route('/destinations/<int:destination_id>', methods=['GET'])
+@app.route('/api/destinations/<int:destination_id>', methods=['GET'])
 def get_destination(destination_id):
     destination = Destination.query.get_or_404(destination_id)
     return jsonify({
@@ -455,7 +455,7 @@ def get_destination(destination_id):
         'destination_address': destination.destination_address
     }), 200
 
-@app.route('/destinations', methods=['POST'])
+@app.route('/api/destinations', methods=['POST'])
 def create_destination():
     data = request.get_json()
     if not data or 'destination_name' not in data or 'destination_address' not in data:
@@ -468,7 +468,7 @@ def create_destination():
     db.session.commit()
     return jsonify({'message': 'Destination created successfully'}), 201
 
-@app.route('/destinations/<int:destination_id>', methods=['PATCH'])
+@app.route('/api/destinations/<int:destination_id>', methods=['PATCH'])
 def update_destination(destination_id):
     data = request.get_json()
     destination = Destination.query.get_or_404(destination_id)
@@ -480,7 +480,7 @@ def update_destination(destination_id):
     return jsonify({'message': 'Destination updated successfully'}), 200
 
 
-@app.route('/destinations/<int:destination_id>', methods=['DELETE'])
+@app.route('/api/destinations/<int:destination_id>', methods=['DELETE'])
 def delete_destination(destination_id):
     destination = Destination.query.get_or_404(destination_id)
     db.session.delete(destination)
