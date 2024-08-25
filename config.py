@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__, static_folder="moringa/phase5/sendit/sendIT-group-3-client/build", static_url_path="/")
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sendit.db' 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SECRET_KEY'] = 'group 3' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

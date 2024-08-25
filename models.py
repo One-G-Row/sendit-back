@@ -1,6 +1,6 @@
 from flask import Flask, session
 from config import db, bcrypt
-""" from utils import generate_password_hash, check_password_hash"""
+""" from utils import generate_password_hash, check_password_hash """
 from sqlalchemy_serializer import SerializerMixin 
 
 
@@ -55,7 +55,7 @@ class User(db.Model, SerializerMixin):
         self._password_hash = bcrypt.generate_password_hash(password)
 
     def verify_password(self, password):
-        return check_password_hash(self._password_hash, password)
+        return bcrypt.check_password_hash(self._password_hash, password)
 
     def to_dict(self):
         return {
@@ -74,7 +74,7 @@ class Admin(db.Model,SerializerMixin):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
 
     @property
     def password(self):
@@ -82,10 +82,10 @@ class Admin(db.Model,SerializerMixin):
     
     @password.setter
     def password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = bcrypt.generate_password_hash(password)
     
     def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
 class MyOrder(db.Model, SerializerMixin):
     __tablename__ = 'myorders'

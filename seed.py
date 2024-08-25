@@ -52,6 +52,8 @@ if __name__ == '__main__':
 
          # Seed Parcels
         parcels = []
+        destination = Destination.query.all()
+        destination_ids = [destination.id for destination in destinations]
         for user in users:
             parcel = Parcel(
                 parcel_item=fake.word(),
@@ -59,6 +61,7 @@ if __name__ == '__main__':
                 parcel_weight=rc([1.0, 2.5, 5.0, 10.0, 20.0]),
                 parcel_cost=rc([50.0, 100.0, 200.0, 300.0]),
                 parcel_status=rc(['Pending', 'Shipped', 'Delivered']),
+                destination_id=rc(destination_ids),
                 user_id=user.id
             )
             parcels.append(parcel)
@@ -66,7 +69,7 @@ if __name__ == '__main__':
         db.session.commit()  # Commit parcels to assign IDs
 
         # Seed Destinations
-        for parcel in parcels:
+        """ for parcel in parcels:
             destination = Destination(
                 location=fake.city(),
                 arrival_day=fake.date_time_between(start_date='-30d', end_date='+30d'),
@@ -75,7 +78,7 @@ if __name__ == '__main__':
             db.session.add(destination)
 
         # Commit all changes
-            db.session.commit()
+            db.session.commit() """
         print("Data seeded successfully!")
 
 
