@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 import os
 
 app = Flask(__name__, static_folder="moringa/phase5/sendit/sendIT-group-3-client/build", static_url_path="/")
-CORS(app)
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SECRET_KEY'] = 'group 3' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
-
 api = Api(app)
 
 frontend_folder = os.path.join(os.getcwd(), "..", "moringa", "phase5", "sendit", "sendIT-group-3-client", "build")

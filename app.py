@@ -272,7 +272,7 @@ class Admins(Resource):
             admins = [admin.to_dict() for admin in Admin.query.all()]
             return make_response(jsonify(admins), 200)
 
-api.add_resource(Admins, '/admins', '/admins/<int:admin_id>')
+api.add_resource(Admins, '/api/admins', '/api/admins/<int:admin_id>')
 
 # Define home route
 @app.route('/api/')
