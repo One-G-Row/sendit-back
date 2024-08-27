@@ -204,7 +204,7 @@ class MyOrders(Resource):
         db.session.add(myorder)
         db.session.commit()
         
-        return make_response(jsonify(myorder.to_dict()), 200)
+        return make_response(jsonify(myorder.to_dict()), 201)
 
     def calculate_cost(self, destination, weight):
         base_cost = 10
@@ -224,20 +224,26 @@ class MyOrdersList(Resource):
         data = request.get_json()
         if not data:
             return {'error': 'No data provided'}, 400
+        
+        required_fields = ['item', 'description', 'weight', 'destination', 'status', 'recipient_name', 'recipient_contact']
+        for field in required_fields:
+            if field not in data:
+                return {'error': f'Missing {field}'}, 400
+            
         try:
            myorder = MyOrder(
               item = data['item'],
               description = data['description'],
               weight = data['weight'],
               destination = data['destination'],
-              cost = data['cost'],
+              cost = data['cost', 0],
               status = data['status'],
               recipient_name = data['recipient_name'],
               recipient_contact = data['recipient_contact']
            )
            db.session.add(myorder)
            db.session.commit() 
-           return make_response(jsonify(myorder.to_dict(), 201))
+           return make_response(jsonify(myorder.to_dict()), 201)
         
         except Exception as e:
            print("Error:", e) 
