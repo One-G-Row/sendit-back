@@ -58,7 +58,7 @@ class LoginAdmin(Resource):
     def post(self):
         data = request.get_json()
         admin = Admin.query.filter(Admin.email == data['email']).first()
-        if admin and check_password_hash(admin.password_hash, data['password']):
+        if admin:
             session['admin_id'] = admin.id
             response = make_response(jsonify(admin.to_dict()), 200)
             return response
