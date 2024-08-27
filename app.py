@@ -236,7 +236,7 @@ class MyOrdersList(Resource):
               description = data['description'],
               weight = data['weight'],
               destination = data['destination'],
-              cost = data['cost', 0],
+              cost = data['cost'],
               status = data['status'],
               recipient_name = data['recipient_name'],
               recipient_contact = data['recipient_contact']
