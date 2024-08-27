@@ -18,7 +18,7 @@ class Parcel(db.Model,SerializerMixin):
     
     destination = db.relationship('Destination', back_populates='parcel')
     user = db.relationship('User', back_populates='parcels')
-    myorder = db.relationship('MyOrder', back_populates='parcel')
+    """ myorder = db.relationship('MyOrder', back_populates='parcel') """
 
 class Destination(db.Model, SerializerMixin):
     __tablename__ = 'destinations'
@@ -100,7 +100,7 @@ class MyOrder(db.Model, SerializerMixin):
     recipient_name = db.Column(db.String(50), nullable=True)
     recipient_contact = db.Column(db.Integer, nullable=False, default=0)
 
-    parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
-    parcel = db.relationship('Parcel', back_populates='myorder')
+    """  parcel_id = db.Column(db.Integer, db.ForeignKey('parcels.id'), nullable=True)
+    parcel = db.relationship('Parcel', back_populates='myorder') """
 
 

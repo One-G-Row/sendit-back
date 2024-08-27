@@ -151,13 +151,11 @@ class MyOrders(Resource):
     def post(self):
         data = request.get_json()
 
-        # Validate the incoming data
         required_fields = ['item', 'description', 'weight', 'destination', 'status', 'recipient_name', 'recipient_contact']
         for field in required_fields:
             if field not in data:
                 return make_response(jsonify({'error': f'Missing {field}'}), 400)
 
-        # Create a new MyOrder object
         new_order = MyOrder(
             item=data['item'],
             description=data['description'],
@@ -168,7 +166,7 @@ class MyOrders(Resource):
             recipient_contact=data['recipient_contact'],
             cost=self.calculate_cost(data['destination'], data['weight'])  
         )
-        # Add and commit the new order to the database
+
         try:
             db.session.add(new_order)
             db.session.commit()
@@ -184,7 +182,6 @@ class MyOrders(Resource):
         if not myorder:
             return make_response(jsonify({'error': 'MyOrder not found'}), 404)
         
-        # Update the order with the provided data
         if 'item' in data:
             myorder.item = data['item']
         if 'description' in data:
@@ -204,7 +201,6 @@ class MyOrders(Resource):
             myorder.recipient_contact = data['recipient_contact']
 
  
-        # Commit the updated order to the database
         db.session.add(myorder)
         db.session.commit()
         
